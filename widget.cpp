@@ -2,6 +2,10 @@
 #include "ui_widget.h"
 #include "algorithms.h"
 
+
+
+
+
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)
@@ -40,4 +44,35 @@ void Widget::on_pushButton_3_clicked()
 void Widget::on_pushButton_4_clicked()
 {
     ui->Canvas->setStatus(true);
+}
+
+void Widget::on_pushButton_clicked()
+{
+    int i=0;
+    int j=0;
+    double n[250];
+    double m[9999];
+
+    QString fileident=QFileDialog::getOpenFileName(
+             this,
+             tr("seznam polygonu"),
+             "C:\\",
+             "Text File (*.txt);; Tex File (*.cvc)");
+
+    const char* pathident = fileident.toLatin1().data();
+
+    std::ifstream fident;
+
+    fident.open(pathident);
+
+    while(!fident.eof()){
+      j=j+1;
+    fident>>n[j];
+    }
+    fident.close();
+    fident.clear();
+
+
+
+
 }

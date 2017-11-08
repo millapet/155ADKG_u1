@@ -3,6 +3,13 @@
 
 #include <QWidget>
 
+#include <QFileDialog>
+#include <QDesktopServices>
+#include <QFile>
+#include <fstream>
+#include <string>
+#include <iomanip>
+
 
 namespace Ui {
 class Widget;
@@ -22,6 +29,8 @@ private slots:
     void on_pushButton_3_clicked();
 
     void on_pushButton_4_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::Widget *ui;
