@@ -2,7 +2,9 @@
 #include "ui_widget.h"
 #include "algorithms.h"
 
-
+#include <QFileDialog>
+//#include <QDesktopServices>
+#include <fstream>
 
 
 
@@ -18,35 +20,39 @@ Widget::~Widget()
     delete ui;
 }
 
-void Widget::on_pushButton_2_clicked()
+void Widget::on_pushButton_2_clicked() //when you click "clear"
 {
     ui->Canvas->setStatus(false);
     ui->Canvas->clear();
 }
 
-void Widget::on_pushButton_3_clicked()
+void Widget::on_pushButton_3_clicked() //when you click "analyze"
 {
-    int result;
+    std::vector<int> result;
     QPoint q = ui->Canvas->getQ();
 
-    std::vector<QPoint> points;
-    points = ui->Canvas->getPoints();
+    std::vector<std::vector<QPoint>> poly_list;
+    poly_list = ui->Canvas->getList();
 
     if(ui->comboBox->currentIndex() == 0)
-        result = algorithms::getWindingPos(q, points);
+        result = algorithms::iterateWindingPos(q, poly_list);
     else
-        result = algorithms::getRayPos(q, points);
+        result = algorithms::iterateRayPos(q, poly_list);
 
-    ui->label_2->setText(QString::number(result));
+    QString stringresult;
+    for(int i=0;i<result.size();i++){
+        stringresult += " "+result[i]; //TODO this may not work, do something better when testing is available
+    }
+    ui->label_2->setText(stringresult);
 
 }
 
-void Widget::on_pushButton_4_clicked()
+void Widget::on_pushButton_4_clicked() //when you click "set point" - will delete
 {
     ui->Canvas->setStatus(true);
 }
 
-void Widget::on_pushButton_clicked()
+void Widget::on_pushButton_clicked() //when you click "load"
 {
     int i=0;
     int j=0;
@@ -57,7 +63,7 @@ void Widget::on_pushButton_clicked()
              this,
              tr("seznam polygonu"),
              "C:\\",
-             "Text File (*.txt);; Tex File (*.cvc)");
+             "Text File (*.txt);; Tex File (*.cvc)"); //podle zadani cvc ani nechce
 
     const char* pathident = fileident.toLatin1().data();
 

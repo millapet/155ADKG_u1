@@ -20,6 +20,9 @@ int algorithms::getPosition(QPoint &q,QPoint &a, QPoint &b)
     if(det<-eps)
         return 0;
 
+    if(det<eps && det>-eps)
+        return 2; //singular case - the point lies on the line
+
     return -1;
 }
 
@@ -39,7 +42,7 @@ double algorithms::getAngle(QPoint &p1,QPoint &p2,QPoint &p3, QPoint &p4)
 }
 
 
-int algorithms::getWindingPos(QPoint &q, std::vector<QPoint> pol)
+bool algorithms::getWindingPos(QPoint &q, std::vector<QPoint> pol)
 {
     double om=0.0;
     double eps = 1.0e-6;
@@ -55,6 +58,10 @@ int algorithms::getWindingPos(QPoint &q, std::vector<QPoint> pol)
 
         //Get position
         int t = getPosition(q, pol[i], pol[i+1]);
+
+        //Point is on the line - we know it is in
+        if(t==2)
+            return 1;
 
         //Point q in the left halfplane
         if(t > 0)
@@ -78,7 +85,7 @@ int algorithms::getWindingPos(QPoint &q, std::vector<QPoint> pol)
 
 }
 
-int algorithms::getRayPos(QPoint &q, std::vector<QPoint> pol){
+bool algorithms::getRayPos(QPoint &q, std::vector<QPoint> pol){
 
     int k=0;
 
@@ -88,6 +95,9 @@ int algorithms::getRayPos(QPoint &q, std::vector<QPoint> pol){
     //Process all polygon segments
     for (int i=0;i<pol.size()-1;i++)
     {
+        //First test if the point is on the line
+        if(getPosition(q, pol[i], pol[i+1])==2) return 1;
+
         //Get reduced points of the line segment
         double xi = pol[i].x()-q.x();
         double yi = pol[i].y()-q.y();
@@ -97,7 +107,7 @@ int algorithms::getRayPos(QPoint &q, std::vector<QPoint> pol){
         //A suitable line segment
         if((yi<=0)&&(yii>0)||(yii<=0)&&(yi>0))
         {
-            //Point inn the right halfplane
+            //Point in the right halfplane
             double xn = (xii*yi - xi*yii)/(yii - yi);
             if (xn > 0)
                 k++;
@@ -112,7 +122,21 @@ int algorithms::getRayPos(QPoint &q, std::vector<QPoint> pol){
         return 1;
 }
 
+std::vector<int> algorithms::iterateWindingPos(QPoint &q, std::vector<std::vector<QPoint>> pol_list){
+    std::vector<int> res;
+    for(int i=0;i<pol_list.size();i++){
+        if(getWindingPos(q,pol_list[i])==1) res.push_back(i); //returns index of the first polygon that passes
+    }
+    return res; //TODO osetrit pripad kdy bod nelezi nikde
+}
 
+std::vector<int> algorithms::iterateRayPos(QPoint &q, std::vector<std::vector<QPoint>> pol_list){
+    std::vector<int> res = std::vector<int>(); //TODO check if this is the right syntax for creating an empty vector
+    for(int i=0;i<pol_list.size();i++){
+        if(getRayPos(q,pol_list[i])==1) res.push_back(i); //returns index of the first polygon that passes
+    }
+    return res; //exit with error
+}
 
 
 

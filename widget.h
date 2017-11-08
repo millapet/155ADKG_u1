@@ -3,13 +3,6 @@
 
 #include <QWidget>
 
-#include <QFileDialog>
-#include <QDesktopServices>
-#include <QFile>
-#include <fstream>
-#include <string>
-#include <iomanip>
-
 
 namespace Ui {
 class Widget;

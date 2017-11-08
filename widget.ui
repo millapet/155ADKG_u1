@@ -116,7 +116,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Position:</string>
+         <string>Number of polygon: </string>
         </property>
        </widget>
       </item>

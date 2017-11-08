@@ -11,8 +11,8 @@ class draw : public QWidget
 private:
     bool point;
     QPoint q;
+    std::vector<std::vector<QPoint>> poly_list;
     std::vector<QPoint> points;
-    struct list{/*chci vektor ukazatelu na jednotlivy polygony*/};
 
 public:
     explicit draw(QWidget *parent = nullptr);
@@ -20,6 +20,7 @@ public:
     void paintEvent(QPaintEvent *e);
     void clear();
     std::vector<QPoint> getPoints(){return points;}
+    std::vector<std::vector<QPoint>> getList(){return poly_list;}
     QPoint getQ(){return q;}
     void setStatus(bool status) {point = status;}
     void fillPolygon(/*viz cpp soubor*/);
