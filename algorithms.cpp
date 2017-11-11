@@ -105,7 +105,7 @@ bool algorithms::getRayPos(QPoint &q, std::vector<QPoint> pol){
         double yii= pol[i+1].y()-q.y();
 
         //A suitable line segment
-        if((yi<=0)&&(yii>0)||(yii<=0)&&(yi>0))
+        if(((yi<=0)&&(yii>0))||((yii<=0)&&(yi>0)))
         {
             //Point in the right halfplane
             double xn = (xii*yi - xi*yii)/(yii - yi);

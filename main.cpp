@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     QPoint q(10,5);
 
     //Test point and polygon position
-    int t0 = algorithms::getRayPos(q,pol);
+    //int t0 = algorithms::getRayPos(q,pol);
 
     //Simple test: position
     QPoint p(5,-5);

@@ -47,9 +47,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Set Point</string>
+         <string>Status: </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="status_label">
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
@@ -121,7 +128,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="analyze_label">
         <property name="text">
          <string/>
         </property>

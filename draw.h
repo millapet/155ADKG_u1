@@ -4,15 +4,18 @@
 #include <QWidget>
 #include <QPoint>
 #include <QtGui>
+#include<QString>
+#include<fstream>
+#include<vector>
 
 class draw : public QWidget
 {
     Q_OBJECT
 private:
-    bool point;
     QPoint q;
     std::vector<std::vector<QPoint>> poly_list;
     std::vector<QPoint> points;
+    bool p_flag;
 
 public:
     explicit draw(QWidget *parent = nullptr);
@@ -22,8 +25,8 @@ public:
     std::vector<QPoint> getPoints(){return points;}
     std::vector<std::vector<QPoint>> getList(){return poly_list;}
     QPoint getQ(){return q;}
-    void setStatus(bool status) {point = status;}
-    void fillPolygon(/*viz cpp soubor*/);
+    void drawPolygons();
+    void loadData (const char* path, std::ifstream &file, QString &status);
 
 signals:
 
