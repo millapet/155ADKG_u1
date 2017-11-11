@@ -19,25 +19,24 @@ void draw::mousePressEvent(QMouseEvent *e)
 void draw::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
-    painter.begin(this);
+    //painter.begin(this);
     if(p_flag){
         for (int j=0; j<poly_list.size();j++)
            { //iterate over all the polygons
                QPolygon polygon;
                for (int i=0;i < points.size(); i++) //iterate over each point in polygon
                {
-                   polygon.append(points[i]*100);
+                   polygon.append(points[i]);
                }
                painter.drawPolygon(polygon); //draw the outlines
            }
-        painter.drawEllipse(q.x() - 5 ,q.y()-5, 100, 100);
         p_flag=false; //set back to point drawing
     }
     else{
         painter.drawEllipse(q.x() - 5 ,q.y()-5, 10, 10);
     }
     //paintEvent(e);
-    painter.end();
+    //painter.end();
 }
 
 void draw::drawPolygons(){
@@ -67,14 +66,17 @@ void draw::loadData (const char* path, std::ifstream &file, QString &status){
             status = "Error: No polygons found.";
             return;
         }
-        //make room for the right ammount of polygons
-        poly_list.clear();
-        poly_list.reserve(poly_count);
+        //initialize the right number of vectors in the main vector
+        std::vector<std::vector<QPoint> > tmp(poly_count, std::vector<QPoint>(0));
+        //swap the temporary vector with the class vector
+        std::swap(poly_list, tmp);
 
         int p = 0; //number of polygon being processed
+
+        //temporary vector for storing polygon's x coordinates
+        std::vector<double> tmp_x;
+
         while (file.good()){
-            //make sure we start with an empty vector
-            points.clear();
             //number of points in one polygon
             int pt_count;
             file >> pt_count;
@@ -82,22 +84,24 @@ void draw::loadData (const char* path, std::ifstream &file, QString &status){
                 status = "Error: Cannot enter a polygon with less than 3 points.";
                 return;
             }
-            //make space for the right ammount of points
-            points.reserve(pt_count);
-            //add points - x first
-            for (int i = 0; i<pt_count; i++){
-                int tmp_x;
-                file>>tmp_x;
-                points[i].setX(tmp_x);
+            //if the capacity of the vector is less than what we need, reserve more space
+            if(tmp_x.capacity()<pt_count){
+                tmp_x.reserve(pt_count);
             }
-            //now add y coordinates from the second row
+            //reserve space in the final vector
+            poly_list[p].reserve(pt_count);
+
+            //load x coordinates of a polygon
+            for(int i=0; i<pt_count;i++){
+                file>>tmp_x[i];
+            }
+
+            //load each y coordinate and store the QPoint
+            double tmp_y;
             for(int i=0; i<pt_count; i++){
-                int tmp_y;
                 file>>tmp_y;
-                points[i].setY(tmp_y);
+                poly_list[p].push_back(QPoint(tmp_x[i],tmp_y));
             }
-            //add the polygon points to the list
-            poly_list[p] = points;
             p++;
         }
         file.close();
