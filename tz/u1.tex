@@ -176,6 +176,33 @@
 \clearpage
 \section{Popis a rozbor problému} %+vzorce
 \indent 
+Tato úloha se věnuje řešení praktického problému určování pozici zvoleného bodu $q$, vůči zadaným polygonům. Jako implementaci lze nejjednodušeji představit zjišťování polohy jistého bodu kliknutím na digitální mapě. 
+\\
+\\
+\textsl{Nechť existuje pole ve dvojrozměrné kartézské soustavě s \textbf n body. Uzavřením tohoto pole vznikne polygon. Polygon může nabývat jak konvexní, tak nekonvexní tvar.}
+\\
+\\
+Polygon je konvexní právě tehdy, když poloha všech bodů je vůči jaké koliv přímce procházející vedle polygonu, vždy na stejné straně. 
+
+Rozdíl mezi \textsl konvexním a  \textsl nekonvexním polygonem je možno pozorovat dle níže uvedených obrázku.
+\begin{figure}[htbp]
+\centering
+        \includegraphics[clip, trim=0cm 0cm 0cm 0cm, width=0.2500\textwidth]{obrazek1.png}
+ \includegraphics[clip, trim=0cm 0cm 0cm 0cm, width=0.2500\textwidth]{obrazek2.png}
+\end{figure}
+\bigskip
+\begin{center}
+obr 1.:\textsl{konvexní polygon  a   nekonvexní polygon} [1]
+\end{center}
+Pokud následovně polygon rozdělíme na menší polygonové úpravy, pak polohu zvoleného bodu $q$ můžeme popsat následovně: 
+\begin{enumerate}
+\item   Bod $q$ se nachází uvnitř polygonu  $q {\in} P_i$ 
+\item  b)  Bod $q$ se nachází vně všech polygonů  $q {\not \in} P_i$ 
+\item  c) Bod se nachází na hraně jednoho  $q {\not \in} P_i$ nebo dvou polygonů $q {\in} P_{i,i+1}$ 
+\item d) Bod je totožný s vrcholem jednoho polygonu nebo více polygonů $q {\in} P_{i,i+1,...,i+n}$
+\end{enumerate}
+Výpočet se bude provádět na základě metody \textbf {Ray crossing algorith} a  \textbf {Winding Number algorith}. Jdjich výpočet je popsat v následujících kapitolách. 
+\\
 \clearpage
 \section{Popisy algoritmů} %formálním jazykem
 \clearpage
