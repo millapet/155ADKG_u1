@@ -21,15 +21,15 @@ void draw::paintEvent(QPaintEvent *e)
     /* TODO: Qt's coordinate axes are different to the standard axes
     0;0 is in the top left corner, y increases downwards and x increases rightwards
     this is why we  need to transform the coordinates */
-    painter.setWindow(0,0,600,600);
-
+    //painter.setWindow(0,0,600,600);
+    auto min = std::min_element(poly_list.begin(),poly_list.end(),);
     //set brush properties (color and style of filled polygons)
     QBrush brush(Qt::red,Qt::Dense6Pattern);
 
     //draw the polygons
         for (unsigned int j=0; j<poly_list.size();j++)
            { //iterate over all the polygons
-               QPolygon polygon;
+               QPolygonF polygon;
                //iterate over each point in polygon
                for (unsigned int i=0;i < poly_list[j].size(); i++)
                {
@@ -70,7 +70,7 @@ void draw::loadData (const char* path, std::ifstream &file, QString &status){
             return;
         }
         //initialize the right number of vectors in the main vector
-        std::vector<std::vector<QPoint> > tmp(poly_count, std::vector<QPoint>(0));
+        std::vector<std::vector<QPointF> > tmp(poly_count, std::vector<QPointF>(0));
         //swap the temporary vector with the class vector
         std::swap(poly_list, tmp);
 
@@ -99,11 +99,11 @@ void draw::loadData (const char* path, std::ifstream &file, QString &status){
                 file>>tmp_x[i];
             }
 
-            //load each y coordinate and store the QPoint
+            //load each y coordinate and store the QPointF
             double tmp_y;
             for(unsigned int i=0; i<pt_count; i++){
                 file>>tmp_y;
-                poly_list[p].push_back(QPoint(tmp_x[i],tmp_y));
+                poly_list[p].push_back(QPointF(tmp_x[i],tmp_y));
             }
             p++;
             if(p==poly_count){
@@ -115,7 +115,7 @@ void draw::loadData (const char* path, std::ifstream &file, QString &status){
         status = "Polygon loaded successfully.";
         return;
         }
-        status = "Oops! Something went wrong.";
+        status = "Error: Failed to load file.";
     }
     catch(...){
     status = "Error: Unknown Exception.";

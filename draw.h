@@ -2,7 +2,7 @@
 #define DRAW_H
 
 #include <QWidget>
-#include <QPoint>
+#include <QPointF>
 #include <QtGui>
 #include<QString>
 #include<fstream>
@@ -12,9 +12,9 @@ class draw : public QWidget
 {
     Q_OBJECT
 private:
-    QPoint q;
-    std::vector<std::vector<QPoint>> poly_list; //polygon list with all the loaded values
-    std::vector<QPoint> points;
+    QPointF q;
+    std::vector<std::vector<QPointF>> poly_list; //polygon list with all the loaded values
+    std::vector<QPointF> points;
     std::vector<int> result_polygons; //polygons to be colored
 
 public:
@@ -22,11 +22,11 @@ public:
     void mousePressEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *e);
     void clear();
-    std::vector<QPoint> getPoints(){return points;}
-    std::vector<std::vector<QPoint>> getList(){return poly_list;}
-    QPoint getQ(){return q;}
-    void loadData (const char* path, std::ifstream &file, QString &status);
-    void setResultPolygons(std::vector<int> res){result_polygons = res;}
+    std::vector<QPointF> getPoints(){return points;} //access to private points
+    std::vector<std::vector<QPointF>> getList(){return poly_list;} //access to private polygon list
+    QPointF getQ(){return q;} //access to private point
+    void loadData (const char* path, std::ifstream &file, QString &status); //function to load polygon coordinates
+    void setResultPolygons(std::vector<int> res){result_polygons = res;} //sets the private variable containing the indexes of polygons with a point in them
 
 
 signals:
