@@ -237,18 +237,18 @@ Hledáný algoritmus je možné popsat následovně:
 \item Sčítaní počtu redukováných bodů, pro $x_i^{'} > 0$  
 
 
-\item Poté nastáva situace, že pokud počet průsečíku je sudý, pak $q \in P$, pokud není, pak  $q \notin P$ 
+\item Pokud je počet průsečíku sudý, pak $q \in P$, pokud není, pak  $q \notin P$ 
 
 \end{enumerate} 
 \clearpage
 \newpage 
 
 \subsection{Winding Number Algorithm} 
-\textsl{Nechť existuje uzavřený polygon ve dvojrozměrné kartézské soustavě, tvořený pomocí \textbf n bodů. Nechť následně existuje bod q, polohu kterého se snažíme určit. Z pohledu bodu $q$ provedeme orientaci směru ze které pak následně se určí součet všech úhlů na jednotlivé body uvedeného polygonu.}
+\textsl{Nechť existuje uzavřený polygon ve dvojrozměrné kartézské soustavě, tvořený pomocí \textbf n bodů. Nechť následně existuje bod q, polohu kteréhož se snažíme určit. Z pohledu bodu $q$ provedeme orientaci směru, ze které se pak následně určí součet všech úhlů na jednotlivé body uvedeného polygonu.}
 \\
 \\
-Součtový úhel bude dále uváděn jako $w$. Výpočet je lepší provádět proti směru pohybu hodinových ručiček, jelikož v případě toho směru hodnota počítaných oběhů Winding Number $\Omega$  dosahuje kladných hodnot. Je třeba taky pamatovat, že hodnota $\Omega$ je uváděna v počtech oběhů a je záporná při oběhu ve směru 
-hodinových ručiček a kladná ve směru opačném. Do výpočtu taky vstupuje tolerance $\epsilon$, která zahrnuje vlivy v zaokrouhlování. Dle uvedené matematické podmínky, může nastát následující výsledky:
+Součtový úhel bude dále značen jako $w$. Výpočet je lepší provádět proti směru hodinových ručiček, jelikož v případě tohoto směru hodnota počítaných oběhů Winding Number $\Omega$  nabývá kladných hodnot. Je třeba také pamatovat, že hodnota $\Omega$ je uváděna v počtech oběhů a je záporná při oběhu po směru 
+hodinových ručiček a kladná ve směru opačném. Do výpočtu také vstupuje tolerance $\epsilon$, která zahrnuje chyby vzniklé zaokrouhlováním a strojovou přesností. Dle uvedených matematických podmínek mohou nastat následující případy:
 \begin{enumerate} 
 \item $w$=\textbf {2R}, pak $q \in P_i$ 
 \item  $w$ < \textbf {2R}, pak $q {\not \in} P_i$
@@ -263,7 +263,7 @@ hodinových ručiček a kladná ve směru opačném. Do výpočtu taky vstupuje 
 
 \item Určení úhlu $\omega_i = \angle p_i, q, p_{i+1}$ 
 
-\item  $\omega = \omega + \omega_i$, pro bod vprávo od orientace na bod $p_i$, pokud bod vlevo od orientace na bod $p_i$, pak $\omega = \omega - \omega_i$
+\item  $\omega = \omega + \omega_i$, pro bod vprávo od orientace na bod $p_i$, pokud je bod vlevo od orientace na bod $p_i$, pak $\omega = \omega - \omega_i$
 
 \item Pokud platí podmínka $(\left|\omega - 2\Pi \right| < \epsilon)$, pak $q \in P$
 
@@ -287,7 +287,12 @@ hodinových ručiček a kladná ve směru opačném. Do výpočtu taky vstupuje 
 \section{Ukázka aplikace} %printscreen
 \clearpage
 \section{Závěr}
+\indent Autoři splnili většinu bodů zadání a vznikl program, který načítá soubor polygonů, následně uživatele nechá umístit bod a po stisknutí tlačítka urči, zda a ve kterých polygonech bod leží. 
 	\subsection{Náměty na vylepšení} %+možné či neřešené problémy
+	\indent Aplikace, ač funkční a splňující daný účel, má spoustu nedostatků, které by bylo dobré v budoucnu odstranit. Autoři zde uvádí pár těch nejzjevnějších. \\
+	\indent \textit{Vykreslování dat:} Aplikace bez problému vykreslí body, které se vejdou do jejího okna 665x605px. Problém nastává až tehdy, když jsou souřadnice větší než tato hodnota. Tato chyba jde odstranit vhodnou transformací okna (nebo souřadnic), která by ale probíhala na základě načtených dat. \\
+	\indent \textit{Souřadnicové osy: } Vykreslovací okno má v Qt, stejně jako ve většině podobných nástrojů, počátek souřadnic v levém horním rohu, kladnou osu x vpravo a kladnou osu y směrem dolů. Tento model se však neshoduje ani s geodetickými souřadnicemi používanými na našem území (kladná y doleva, kladná x dolů), ani s klasickým označením os (kladná x doprava, kladná y nahoru). Proto se body v současné verzi zobrazují jinak, než by možná uživatel očekával. Vhodným řešením by byla opět transformace. \\
+	\indent \textit{Přesnější souřadnice:} V současném stavu aplikace sice načítá data ve formátu \texttt{double}, avšak datová struktura \texttt{std::vector<std::vector<QPoint>>} body načítá bez desetinných míst jako typ \texttt{int}. V Qt knihovnách existuje i datový typ \texttt{QPointF}, který ukládá body jako typ \texttt{float}. Změně však bude potřeba přizpůsobit porovnávání čísel v algoritmech.
 \bibliography{u1}
 \bibliographystyle{plain}
 \addcontentsline{toc}{section}{References}
