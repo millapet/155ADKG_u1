@@ -176,15 +176,15 @@
 \clearpage
 \section{Popis a rozbor problému} %+vzorce
 \indent 
-Tato úloha se věnuje řešení praktického problému určování pozici zvoleného bodu $q$, vůči zadaným polygonům. Jako implementaci lze nejjednodušeji představit zjišťování polohy jistého bodu kliknutím na digitální mapě. 
+Tato úloha se věnuje řešení praktického problému určování pozice uživatelem zadaného bodu $q$ vůči polygonům načteným ze souboru. Jako implementaci si lze zjednodušeně představit zjišťování polohy konkrétního bodu kliknutím na digitální mapě. 
 \\
 \\
 \textsl{Nechť existuje pole ve dvojrozměrné kartézské soustavě s \textbf n body. Uzavřením tohoto pole vznikne polygon. Polygon může nabývat jak konvexní, tak nekonvexní tvar.}
 \\
 \\
-Polygon je konvexní právě tehdy, když poloha všech bodů je vůči jaké koliv přímce procházející vedle polygonu, vždy na stejné straně. 
+Polygon je konvexní právě tehdy, když poloha všech bodů je vůči jakékoliv přímce procházející vedle polygonu, vždy na stejné straně. 
 
-Rozdíl mezi \textsl konvexním a  \textsl nekonvexním polygonem je možno pozorovat dle níže uvedených obrázku.
+Rozdíl mezi \textsl konvexním a  \textsl nekonvexním polygonem je možné názorně vidět na obrázcích níže.
 \begin{figure}[htbp]
 \centering
         \includegraphics[clip, trim=0cm 0cm 0cm 0cm, width=0.2500\textwidth]{obrazek1.png}
@@ -192,32 +192,32 @@ Rozdíl mezi \textsl konvexním a  \textsl nekonvexním polygonem je možno pozo
 \end{figure}
 \bigskip
 \begin{center}
-obr 1.:\textsl{konvexní polygon  a   nekonvexní polygon} [1]
+obr 1.:\textsl{konvexní polygon (vlevo) a nekonvexní polygon (vpravo)}
 \end{center}
-Pokud následovně polygon rozdělíme na menší polygonové úpravy, pak polohu zvoleného bodu $q$ můžeme popsat následovně: 
+Pokud následně polygon rozdělíme na menší polygonové útvary, pak polohu zvoleného bodu $q$ můžeme popsat následovně: 
 \begin{enumerate}
 \item   Bod $q$ se nachází uvnitř polygonu  $q {\in} P_i$ 
 \item   Bod $q$ se nachází vně všech polygonů  $q {\not \in} P_i$ 
 \item   Bod se nachází na hraně jednoho  $q {\not \in} P_i$ nebo dvou polygonů $q {\in} P_{i,i+1}$ 
 \item   Bod je totožný s vrcholem jednoho polygonu nebo více polygonů $q {\in} P_{i,i+1,...,i+n}$
 \end{enumerate}
-Výpočet se bude provádět na základě metody \textbf {Ray crossing algorithm} a  \textbf {Winding Number algorithm}. Jdjich výpočet je popsat v následujících kapitolách. 
+Výpočet se bude provádět na základě metod \textbf {Ray Crossing algorithm} a  \textbf {Winding Number algorithm}. Jejich výpočet je popsán v následujících kapitolách. 
 \\
 \clearpage
 \section{Popisy algoritmů} %formálním jazykem
-Existuje hned několik způsobů řešení této úlohy, v dané úloze výpočet byl proveden na základě níže uvedených algoritmů.
+V dané úloze jsou použity následující algoritmy, avšak existují i další možnosti, jak polohu bodu určit (metoda pásů, Line Sweep algorithm aj.)
 \subsection{Ray crossing algorithm}
-\textsl{Nechť existuje uzavřený polygon ve dvojrozměrné kartézské soustavě, tvořený pomocí \textbf n bodů. Nechť následně existuje bod q, polohu kterého se snažime určit. Proložíme-li bodem q nekoneční počet paprsků směrem k polygonu, pak pro jednotlivý paprsek nastané následující situace: }
+\textsl{Nechť existuje uzavřený polygon ve dvojrozměrné kartézské soustavě, tvořený \textbf n body. Nechť následně existuje bod q, kteréhož polohu se snažime určit. Proložíme-li bodem q nekonečný počet paprsků směrem k polygonu, pak pro jednotlivý paprsek nastane jedna z následujících situací: }
 \begin{enumerate}
-\item   počet průsečíků paprsku  $k$ je roven sudému počtu, pak  bod $q$ se nachází vně polygonu  $q {\not \in} P_i$ 
-\item  počet průsečíků paprsku  $k$ je roven lichému počtu, pak  bod $q$ se nachází uvnitř polygonu  $q \in P_i$
+\item   počet průsečíků paprsku  $k$ je roven sudému počtu, pak se bod $q$ nachází vně polygonu  $q {\not \in} P_i$ 
+\item  počet průsečíků paprsku  $k$ je roven lichému počtu, pak se bod $q$ nachází uvnitř polygonu  $q \in P_i$
 \end{enumerate} 
-Zároveň mohou nastat jisté možností singularity, respektive jisté situace, kdy algoritmus nefunguje nedokáže přímo dat správný výsledek. V algoritmu ray crossing konkretně se jedna o:
+Zároveň mohou nastat singularity, respektive jisté situace, kdy algoritmus "nefunguje" a nedokáže přímo nalézt správný výsledek. V algoritmu ray crossing se konkrétně jedná o tyto případy:
 \begin{enumerate}
 \item   Bod se nachází na hraně jednoho  $q {\in} P_i$ nebo dvou polygonů $q {\in} P_{i,i+1}$ 
 \item   Bod je totožný s vrcholem jednoho polygonu nebo více polygonů $q {\in} P_{i,i+1,...,i+n}$
 \end{enumerate} 
-Řešením je posun, respektivě redukce vrcholů polygonů směr k poloze bodu  $q$.
+Řešením je posun, respektive redukce vrcholů polygonů směrem k poloze bodu  $q$.
 \\
 Hledáný algoritmus je možné popsat následovně:
 \begin{enumerate} 

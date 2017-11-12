@@ -48,6 +48,7 @@ void draw::paintEvent(QPaintEvent *e)
                painter.drawPolygon(polygon);
            }
         painter.drawEllipse(q.x() - 5 ,q.y()-5, 10, 10);
+        result_polygons.clear();
 }
 
 void draw::clear()
