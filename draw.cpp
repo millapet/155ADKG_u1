@@ -18,18 +18,21 @@ void draw::mousePressEvent(QMouseEvent *e)
 void draw::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
+
     /* TODO: Qt's coordinate axes are different to the standard axes
-    0;0 is in the top left corner, y increases downwards and x increases rightwards
-    this is why we  need to transform the coordinates */
-    //painter.setWindow(0,0,600,600);
-    auto min = std::min_element(poly_list.begin(),poly_list.end(),);
+     * 0;0 is in the top left corner, y increases downwards and x increases rightwards
+     * this is why we  need to transform the coordinates.
+     * It would also be good if the app could accept coordinates larger than it's window.
+     * - scaling and transformation need to be done
+     */
+
     //set brush properties (color and style of filled polygons)
     QBrush brush(Qt::red,Qt::Dense6Pattern);
 
     //draw the polygons
         for (unsigned int j=0; j<poly_list.size();j++)
            { //iterate over all the polygons
-               QPolygonF polygon;
+               QPolygon polygon;
                //iterate over each point in polygon
                for (unsigned int i=0;i < poly_list[j].size(); i++)
                {
@@ -49,7 +52,7 @@ void draw::paintEvent(QPaintEvent *e)
 
 void draw::clear()
 {
-    //points.clear();
+    result_polygons.clear();
     poly_list.clear();
     repaint();
 }
@@ -70,7 +73,7 @@ void draw::loadData (const char* path, std::ifstream &file, QString &status){
             return;
         }
         //initialize the right number of vectors in the main vector
-        std::vector<std::vector<QPointF> > tmp(poly_count, std::vector<QPointF>(0));
+        std::vector<std::vector<QPoint> > tmp(poly_count, std::vector<QPoint>(0));
         //swap the temporary vector with the class vector
         std::swap(poly_list, tmp);
 
@@ -99,11 +102,11 @@ void draw::loadData (const char* path, std::ifstream &file, QString &status){
                 file>>tmp_x[i];
             }
 
-            //load each y coordinate and store the QPointF
+            //load each y coordinate and store the QPoint
             double tmp_y;
             for(unsigned int i=0; i<pt_count; i++){
                 file>>tmp_y;
-                poly_list[p].push_back(QPointF(tmp_x[i],tmp_y));
+                poly_list[p].push_back(QPoint(tmp_x[i],tmp_y));
             }
             p++;
             if(p==poly_count){
