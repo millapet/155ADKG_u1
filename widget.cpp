@@ -26,6 +26,7 @@ void Widget::on_pushButton_clear_clicked() //when you click "clear"
 
 void Widget::on_pushButton_analyze_clicked() //when you click "analyze"
 {
+    try{
     std::vector<int> result;
     QPoint q = ui->Canvas->getQ();
 
@@ -40,11 +41,12 @@ void Widget::on_pushButton_analyze_clicked() //when you click "analyze"
     ui->Canvas->repaint();
 
     //report status in label
-    QString string_result;
-    for(unsigned int i=0;i<result.size();i++){
-        string_result += " "+QString::number(result[i]); //TODO this may not work, do something better when testing is available
+    QString status = "Point lies in "+QString::number(result.size())+" polygon(s)";
+    ui->analyze_label->setText(status);
     }
-    ui->analyze_label->setText(string_result);
+    catch(...){
+        ui->analyze_label->setText("Unknown exception appeared.");
+    }
 
 }
 
@@ -52,7 +54,7 @@ void Widget::on_pushButton_load_clicked() //when you click "load"
 {
     QString chosen_file=QFileDialog::getOpenFileName(    //read *.txt file from disk C
                  this,
-                 tr("seznam polygonu"),
+                 tr("Load polygons"),
                  "C:\\",
                  "Text File (*.txt)"); //podle zadani cvc ani nechce //mkay
 

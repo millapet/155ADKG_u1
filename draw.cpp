@@ -24,7 +24,7 @@ void draw::paintEvent(QPaintEvent *e)
     painter.setWindow(0,0,600,600);
 
     //set brush properties (color and style of filled polygons)
-    QBrush brush(Qt::red);
+    QBrush brush(Qt::red,Qt::Dense6Pattern);
 
     //draw the polygons
         for (unsigned int j=0; j<poly_list.size();j++)
@@ -35,7 +35,6 @@ void draw::paintEvent(QPaintEvent *e)
                {
                    polygon.append(poly_list[j].at(i));
                }
-
                //if the polygon contains a point - colour it in, else just draw the outline
                auto in = std::find(result_polygons.begin(),result_polygons.end(),j);
                if(in != result_polygons.end()){
