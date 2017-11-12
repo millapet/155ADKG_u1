@@ -273,16 +273,60 @@ hodinových ručiček a kladná ve směru opačném. Do výpočtu také vstupuje
 \clearpage
 \newpage
 \section{Problematické situace a singularity} %rozbor a osetreni v kodu
-\clearpage
+\subsection{Bod ležící na hraně polygonu} 
+
+\bigskip 
+
+Pokud vyjdeme z podmínky, že bod se nachází na hraně polygonu, pak z pohledu geometrie je jasné, že svýrající úhel mezi krajnými body dané hrany bude roven $R$ neboli. Pokud ale ještě zavedeme chybu toleranci $\epsilon$, pak $R+\epsilon$. Jelikož bod leží na hraně, pak zároveň patří do obou polygonů.
+
+\subsection{Bod je identický s vrcholem jednoho až n polygonů} 
+
+\bigskip 
+
+Byl proveden prohledávácí test, jestli souřadnice bodu  $q$ jsou identické se souřadnicemi kterého koliv polygonu. Pokud test byl úspěšný, pak se již dále neprováděl a rovnou se vybarvil konkretní polygon. Pokud během testu se ukazalo, že souřadnice jsou identické s vrcholem, který je společný pro několik polygonů, pak se vybarvilo hned několik polygonů.
+\begin{figure}[htbp]
+\centering
+        \includegraphics[clip, trim=0cm 0cm 0cm 0cm, width=1\textwidth]{more.jpg}
+\end{figure}
+
 \section{Vstupní data}
-\clearpage
-\subsection{Formát vstupních dat}
-\clearpage
-\subsection{Popis dat}
-\clearpage
+Do programu vstupují dvě odlišné hodnoty: 
+\begin{enumerate} 
+\item analyzovaný bod \textit{\textbf {q}}. 
+\item soubor polygonů. 
+\end{enumerate} 
+
+Analyzovaný bod \textit{\textbf {q}}, vstupuje na základě ručního vstupu přes GUI, tedy zmačknutím levého tlačítka myší v grafickém okně.
+\\
+Vstupní (.txt) soubor obsahuje polygony zadané jednotlivými body.
+
+\bigskip 
+
+ \textit{\textbf {Složený vstupných dat .txt:}}
+První řádek obsahuje počet vstpujících polygonů souřanici \textit{\textbf {X}}
+\\
+Druhý řádek obsahuje počet bodů prvního polygonu
+\\
+Třetý řádek obsahuje vypsané souřadnice  \textit{\textbf {X}} vstupního polygonu
+\\
+Čtvrtý řádek obsahuje vypsané souřadnice  \textit{\textbf {Y}} vstupního polygonu
+\bigskip 
+\\
+Další řádek obsahuje počet bodů druhého polygonu, nasledující vstup je identický se vstupem prvního polygonu
+\bigskip 
+
+Při vstupu textového souboru program již rovnou rozezná počet vstupných polygonů a jejích rozměry, což značně ulehčuje následující prací. Vstupní souřadnice mohou být, jak celočíselné, tak s desetinou tečkou. Souřadnice \textit{\textbf {X}} a \textit{\textbf {Y}} se sekvenčně ukládají do 
+proměnné \textbf {QPoint}, která se ukládá do proměnné vektoru typu  \textbf {std::vector<QPoint>}, který znázorňuje polygon, který  se následně ukláda do proměnné typu  \textbf {std::vector<vector<QPoint>}\textbf {>}, která sloučuje všechny polygony. 
+
+
 \section{Výstupní data}
-	\subsection{Formát výstupních dat}
-	\subsection{Popis dat}
+	Výstup je vizualizací řešeného problému v grafickém okně. Taky v grafickém okně je slovně popsano, do kolika polygonu náleží hledaný bod.\\ 
+\bigskip 
+
+Po načtení vstupních dat \textit{\textbf {Load}}, v pravém horním rohu grafického 
+okna, se polygony ihned vykreslí a po libovolným kliknutí levého tlačítka myši se vykreslí také vstupní 
+bod.\\ 
+Podle výsledků daného testu se červeně zvýrazní polygony, do kterých patří hledaný bod.
 \clearpage
 \section{Ukázky aplikace} %printscreen
 \begin{figure}[htbp]
