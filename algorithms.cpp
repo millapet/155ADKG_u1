@@ -5,7 +5,7 @@ algorithms::algorithms()
 
 }
 
-int algorithms::getPosition(QPointF &q,QPointF &a, QPointF &b)
+int algorithms::getPosition(QPoint &q,QPoint &a, QPoint &b)
 {
     double eps = 1.0e-6;
     double ux = b.x() - a.x();
@@ -26,7 +26,7 @@ int algorithms::getPosition(QPointF &q,QPointF &a, QPointF &b)
     return -1;
 }
 
-double algorithms::getAngle(QPointF &p1,QPointF &p2,QPointF &p3, QPointF &p4)
+double algorithms::getAngle(QPoint &p1,QPoint &p2,QPoint &p3, QPoint &p4)
 {
     double ux = p2.x() - p1.x();
     double uy = p2.y() - p1.y();
@@ -42,7 +42,7 @@ double algorithms::getAngle(QPointF &p1,QPointF &p2,QPointF &p3, QPointF &p4)
 }
 
 
-bool algorithms::getWindingPos(QPointF &q, std::vector<QPointF> pol)
+bool algorithms::getWindingPos(QPoint &q, std::vector<QPoint> pol)
 {
     double om=0.0;
     double eps = 1.0e-6;
@@ -85,7 +85,7 @@ bool algorithms::getWindingPos(QPointF &q, std::vector<QPointF> pol)
 
 }
 
-bool algorithms::getRayPos(QPointF &q, std::vector<QPointF> pol){
+bool algorithms::getRayPos(QPoint &q, std::vector<QPoint> pol){
 
     int k=0;
 
@@ -122,20 +122,20 @@ bool algorithms::getRayPos(QPointF &q, std::vector<QPointF> pol){
         return 1;
 }
 
-std::vector<int> algorithms::iterateWindingPos(QPointF &q, std::vector<std::vector<QPointF>> pol_list){
+std::vector<int> algorithms::iterateWindingPos(QPoint &q, std::vector<std::vector<QPoint>> pol_list){
     std::vector<int> res;
     for(unsigned int i=0;i<pol_list.size();i++){
         if(getWindingPos(q,pol_list[i])==1) res.push_back(i); //returns index of the first polygon that passes
     }
-    return res; //TODO osetrit pripad kdy bod nelezi nikde
+    return res;
 }
 
-std::vector<int> algorithms::iterateRayPos(QPointF &q, std::vector<std::vector<QPointF>> pol_list){
-    std::vector<int> res = std::vector<int>(); //TODO check if this is the right syntax for creating an empty vector
+std::vector<int> algorithms::iterateRayPos(QPoint &q, std::vector<std::vector<QPoint>> pol_list){
+    std::vector<int> res;
     for(unsigned int i=0;i<pol_list.size();i++){
         if(getRayPos(q,pol_list[i])==1) res.push_back(i); //returns index of the first polygon that passes
     }
-    return res; //exit with error
+    return res;
 }
 
 

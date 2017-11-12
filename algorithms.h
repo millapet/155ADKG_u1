@@ -2,22 +2,22 @@
 #define ALGORITHMS_H
 #include <vector>
 
-#include <QPointF>
+#include <QPoint>
 
 
 class algorithms
 {
 public:
     algorithms();
-    static int getPosition(QPointF &p,QPointF &a,QPointF &b);
-    static double getAngle(QPointF &,QPointF &,QPointF &, QPointF &); //calculates angle between points
-    static std::vector<int> iterateWindingPos(QPointF &q, std::vector<std::vector<QPointF>> pol_list); //returns indexes of polygons containing q
-    static std::vector<int> iterateRayPos(QPointF &q, std::vector<std::vector<QPointF>> pol_list); //returns indexes of polygons containing q
+    static int getPosition(QPoint &p,QPoint &a,QPoint &b);
+    static double getAngle(QPoint &,QPoint &,QPoint &, QPoint &); //calculates angle between points
+    static std::vector<int> iterateWindingPos(QPoint &q, std::vector<std::vector<QPoint>> pol_list); //returns indexes of polygons containing q
+    static std::vector<int> iterateRayPos(QPoint &q, std::vector<std::vector<QPoint>> pol_list); //returns indexes of polygons containing q
 
 private:
     //std::vector<int> poly_index;
-    static bool getWindingPos(QPointF &q, std::vector<QPointF> pol); //returns bool - whether the point is in a polygon or not
-    static bool getRayPos(QPointF &q, std::vector<QPointF> pol); //returns bool - whether the point is in a polygon or not
+    static bool getWindingPos(QPoint &q, std::vector<QPoint> pol); //returns bool - whether the point is in a polygon or not
+    static bool getRayPos(QPoint &q, std::vector<QPoint> pol); //returns bool - whether the point is in a polygon or not
 };
 
 #endif // ALGORITHMS_H

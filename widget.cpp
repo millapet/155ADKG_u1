@@ -28,9 +28,9 @@ void Widget::on_pushButton_analyze_clicked() //when you click "analyze"
 {
     try{
     std::vector<int> result;
-    QPointF q = ui->Canvas->getQ();
+    QPoint q = ui->Canvas->getQ();
 
-    std::vector<std::vector<QPointF>> poly_list;
+    std::vector<std::vector<QPoint>> poly_list;
     poly_list = ui->Canvas->getList();
 
     //check which algorithm is selected and find point
