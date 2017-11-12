@@ -27,14 +27,13 @@ void draw::paintEvent(QPaintEvent *e)
     QBrush brush(Qt::red);
 
     //draw the polygons
-        for (int j=0; j<poly_list.size();j++)
+        for (unsigned int j=0; j<poly_list.size();j++)
            { //iterate over all the polygons
                QPolygon polygon;
-               std::vector<QPoint> tmp_polygon;
-               tmp_polygon = poly_list.at(j);
-               for (int i=0;i < tmp_polygon.size(); i++) //iterate over each point in polygon
+               //iterate over each point in polygon
+               for (unsigned int i=0;i < poly_list[j].size(); i++)
                {
-                   polygon.append(tmp_polygon.at(i));
+                   polygon.append(poly_list[j].at(i));
                }
 
                //if the polygon contains a point - colour it in, else just draw the outline
@@ -43,14 +42,9 @@ void draw::paintEvent(QPaintEvent *e)
                    QPainterPath path;
                    path.addPolygon(polygon);
                    painter.fillPath(path,brush);
-                   //painter.drawPolygon(polygon,Qt::WindingFill);
                }
                painter.drawPolygon(polygon);
-
-
-
            }
-        //p_flag=false; //set back to point drawing
         painter.drawEllipse(q.x() - 5 ,q.y()-5, 10, 10);
 }
 
@@ -88,7 +82,7 @@ void draw::loadData (const char* path, std::ifstream &file, QString &status){
 
         while (file.good()){
             //number of points in one polygon
-            int pt_count;
+            unsigned int pt_count;
             file >> pt_count;
             if (pt_count<3){
                 status = "Error: Cannot enter a polygon with less than 3 points.";
@@ -102,17 +96,20 @@ void draw::loadData (const char* path, std::ifstream &file, QString &status){
             poly_list[p].reserve(pt_count);
 
             //load x coordinates of a polygon
-            for(int i=0; i<pt_count;i++){
+            for(unsigned int i=0; i<pt_count;i++){
                 file>>tmp_x[i];
             }
 
             //load each y coordinate and store the QPoint
             double tmp_y;
-            for(int i=0; i<pt_count; i++){
+            for(unsigned int i=0; i<pt_count; i++){
                 file>>tmp_y;
                 poly_list[p].push_back(QPoint(tmp_x[i],tmp_y));
             }
             p++;
+            if(p==poly_count){
+                break;
+            }
         }
         file.close();
         if(!poly_list.empty()){

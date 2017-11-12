@@ -17,11 +17,11 @@ public:
     ~Widget();
 
 private slots:
-    void on_pushButton_2_clicked();
+    void on_pushButton_clear_clicked();
 
-    void on_pushButton_3_clicked();
+    void on_pushButton_analyze_clicked();
 
-    void on_pushButton_clicked();
+    void on_pushButton_load_clicked();
 
 
 private:

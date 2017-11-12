@@ -19,12 +19,12 @@ Widget::~Widget()
     delete ui;
 }
 
-void Widget::on_pushButton_2_clicked() //when you click "clear"
+void Widget::on_pushButton_clear_clicked() //when you click "clear"
 {
     ui->Canvas->clear();
 }
 
-void Widget::on_pushButton_3_clicked() //when you click "analyze"
+void Widget::on_pushButton_analyze_clicked() //when you click "analyze"
 {
     std::vector<int> result;
     QPoint q = ui->Canvas->getQ();
@@ -41,14 +41,14 @@ void Widget::on_pushButton_3_clicked() //when you click "analyze"
 
     //report status in label
     QString string_result;
-    for(int i=0;i<result.size();i++){
+    for(unsigned int i=0;i<result.size();i++){
         string_result += " "+QString::number(result[i]); //TODO this may not work, do something better when testing is available
     }
     ui->analyze_label->setText(string_result);
 
 }
 
-void Widget::on_pushButton_clicked() //when you click "load"
+void Widget::on_pushButton_load_clicked() //when you click "load"
 {
     QString chosen_file=QFileDialog::getOpenFileName(    //read *.txt file from disk C
                  this,

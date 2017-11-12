@@ -37,7 +37,7 @@ double algorithms::getAngle(QPoint &p1,QPoint &p2,QPoint &p3, QPoint &p4)
     double normU = sqrt(ux * ux + uy * uy);
     double normV = sqrt(vx * vx + vy * vy);
 
-    double test =  (acos(s/(normU * normV)))*(180/M_PI);
+    //double test =  (acos(s/(normU * normV)))*(180/M_PI);
     return fabs(acos(s/(normU * normV)))*(180/M_PI);
 }
 
@@ -51,7 +51,7 @@ bool algorithms::getWindingPos(QPoint &q, std::vector<QPoint> pol)
     pol.push_back(pol[0]);
 
     //Process all polygon segments
-    for (int i=0;i<pol.size()-1;i++)
+    for (unsigned int i=0;i<pol.size()-1;i++)
     {
         //Get angle
         double om_l=getAngle(pol[i], q, pol[i+1], q);
@@ -93,7 +93,7 @@ bool algorithms::getRayPos(QPoint &q, std::vector<QPoint> pol){
     pol.push_back(pol[0]);
 
     //Process all polygon segments
-    for (int i=0;i<pol.size()-1;i++)
+    for (unsigned int i=0;i<pol.size()-1;i++)
     {
         //First test if the point is on the line
         if(getPosition(q, pol[i], pol[i+1])==2) return 1;
@@ -124,7 +124,7 @@ bool algorithms::getRayPos(QPoint &q, std::vector<QPoint> pol){
 
 std::vector<int> algorithms::iterateWindingPos(QPoint &q, std::vector<std::vector<QPoint>> pol_list){
     std::vector<int> res;
-    for(int i=0;i<pol_list.size();i++){
+    for(unsigned int i=0;i<pol_list.size();i++){
         if(getWindingPos(q,pol_list[i])==1) res.push_back(i); //returns index of the first polygon that passes
     }
     return res; //TODO osetrit pripad kdy bod nelezi nikde
@@ -132,7 +132,7 @@ std::vector<int> algorithms::iterateWindingPos(QPoint &q, std::vector<std::vecto
 
 std::vector<int> algorithms::iterateRayPos(QPoint &q, std::vector<std::vector<QPoint>> pol_list){
     std::vector<int> res = std::vector<int>(); //TODO check if this is the right syntax for creating an empty vector
-    for(int i=0;i<pol_list.size();i++){
+    for(unsigned int i=0;i<pol_list.size();i++){
         if(getRayPos(q,pol_list[i])==1) res.push_back(i); //returns index of the first polygon that passes
     }
     return res; //exit with error
