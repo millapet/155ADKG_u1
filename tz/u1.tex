@@ -197,15 +197,81 @@ obr 1.:\textsl{konvexní polygon  a   nekonvexní polygon} [1]
 Pokud následovně polygon rozdělíme na menší polygonové úpravy, pak polohu zvoleného bodu $q$ můžeme popsat následovně: 
 \begin{enumerate}
 \item   Bod $q$ se nachází uvnitř polygonu  $q {\in} P_i$ 
-\item  b)  Bod $q$ se nachází vně všech polygonů  $q {\not \in} P_i$ 
-\item  c) Bod se nachází na hraně jednoho  $q {\not \in} P_i$ nebo dvou polygonů $q {\in} P_{i,i+1}$ 
-\item d) Bod je totožný s vrcholem jednoho polygonu nebo více polygonů $q {\in} P_{i,i+1,...,i+n}$
+\item   Bod $q$ se nachází vně všech polygonů  $q {\not \in} P_i$ 
+\item   Bod se nachází na hraně jednoho  $q {\not \in} P_i$ nebo dvou polygonů $q {\in} P_{i,i+1}$ 
+\item   Bod je totožný s vrcholem jednoho polygonu nebo více polygonů $q {\in} P_{i,i+1,...,i+n}$
 \end{enumerate}
-Výpočet se bude provádět na základě metody \textbf {Ray crossing algorith} a  \textbf {Winding Number algorith}. Jdjich výpočet je popsat v následujících kapitolách. 
+Výpočet se bude provádět na základě metody \textbf {Ray crossing algorithm} a  \textbf {Winding Number algorithm}. Jdjich výpočet je popsat v následujících kapitolách. 
 \\
 \clearpage
 \section{Popisy algoritmů} %formálním jazykem
+Existuje hned několik způsobů řešení této úlohy, v dané úloze výpočet byl proveden na základě níže uvedených algoritmů.
+\subsection{Ray crossing algorithm}
+\textsl{Nechť existuje uzavřený polygon ve dvojrozměrné kartézské soustavě, tvořený pomocí \textbf n bodů. Nechť následně existuje bod q, polohu kterého se snažime určit. Proložíme-li bodem q nekoneční počet paprsků směrem k polygonu, pak pro jednotlivý paprsek nastané následující situace: }
+\begin{enumerate}
+\item   počet průsečíků paprsku  $k$ je roven sudému počtu, pak  bod $q$ se nachází vně polygonu  $q {\not \in} P_i$ 
+\item  počet průsečíků paprsku  $k$ je roven lichému počtu, pak  bod $q$ se nachází uvnitř polygonu  $q \in P_i$
+\end{enumerate} 
+Zároveň mohou nastat jisté možností singularity, respektive jisté situace, kdy algoritmus nefunguje nedokáže přímo dat správný výsledek. V algoritmu ray crossing konkretně se jedna o:
+\begin{enumerate}
+\item   Bod se nachází na hraně jednoho  $q {\in} P_i$ nebo dvou polygonů $q {\in} P_{i,i+1}$ 
+\item   Bod je totožný s vrcholem jednoho polygonu nebo více polygonů $q {\in} P_{i,i+1,...,i+n}$
+\end{enumerate} 
+Řešením je posun, respektivě redukce vrcholů polygonů směr k poloze bodu  $q$.
+\\
+Hledáný algoritmus je možné popsat následovně:
+\begin{enumerate} 
+
+\item Inicializace bodů polygonu $p_i$, počet průsečíku = 0;
+
+\item Redukce souřadnic $x$ bodů polygonu k bodu $q$,  respektivě k paprskovému segmentu, $x_i^{'} = x_i - x_q$. 
+
+\item  Redukce souřadnic $y$ bodů polygonu k bodu $q$, respektivě k paprskovému segmentu, $y_i^{'} = y_i - y_q$. 
+
+\item Znovu pro ostatní body daného polygonu $p_i$/ 
+
+\item if $(y_{i}^{'} <= 0)\&\&(y_i+1^{'} > 0)\|(y_{i}^{'} > 0)\&\&(y_i+1^{'} <= 0)$. 
+
+\item $x_m^{'} = (x_i+1^{'}y_{i}^{'}-x_{i}^{'}y_i+1^{'})/(y_{i+1}^{'}-y_{i}^{'})$. 
+
+\item Sčítaní počtu redukováných bodů, pro $x_i^{'} > 0$  
+
+
+\item Poté nastáva situace, že pokud počet průsečíku je sudý, pak $q \in P$, pokud není, pak  $q \notin P$ 
+
+\end{enumerate} 
 \clearpage
+\newpage 
+
+\subsection{Winding Number Algorithm} 
+\textsl{Nechť existuje uzavřený polygon ve dvojrozměrné kartézské soustavě, tvořený pomocí \textbf n bodů. Nechť následně existuje bod q, polohu kterého se snažíme určit. Z pohledu bodu $q$ provedeme orientaci směru ze které pak následně se určí součet všech úhlů na jednotlivé body uvedeného polygonu.}
+\\
+\\
+Součtový úhel bude dále uváděn jako $w$. Výpočet je lepší provádět proti směru pohybu hodinových ručiček, jelikož v případě toho směru hodnota počítaných oběhů Winding Number $\Omega$  dosahuje kladných hodnot. Je třeba taky pamatovat, že hodnota $\Omega$ je uváděna v počtech oběhů a je záporná při oběhu ve směru 
+hodinových ručiček a kladná ve směru opačném. Do výpočtu taky vstupuje tolerance $\epsilon$, která zahrnuje vlivy v zaokrouhlování. Dle uvedené matematické podmínky, může nastát následující výsledky:
+\begin{enumerate} 
+\item $w$=\textbf {2R}, pak $q \in P_i$ 
+\item  $w$ < \textbf {2R}, pak $q {\not \in} P_i$
+\end{enumerate}
+ Níže je uveden algoritmus výpočtu: 
+
+\begin{enumerate} 
+
+\item Vstup $\omega = 0$, tolerance $\epsilon$
+
+\item Orientace z bodu $q$ káždého následujícího bodu  $p_{i+1}$ od orientaci na bod $p_i$
+
+\item Určení úhlu $\omega_i = \angle p_i, q, p_{i+1}$ 
+
+\item  $\omega = \omega + \omega_i$, pro bod vprávo od orientace na bod $p_i$, pokud bod vlevo od orientace na bod $p_i$, pak $\omega = \omega - \omega_i$
+
+\item Pokud platí podmínka $(\left|\omega - 2\Pi \right| < \epsilon)$, pak $q \in P$
+
+\item Pokud neplatí podmínka  $(\left|\omega - 2\Pi \right| < \epsilon)$, pak $q \notin P$
+
+\end{enumerate} 
+\clearpage
+\newpage
 \section{Problematické situace a singularity} %rozbor a osetreni v kodu
 \clearpage
 \section{Vstupní data}
