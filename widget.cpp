@@ -36,7 +36,10 @@ void Widget::on_pushButton_3_clicked() //when you click "analyze"
         result = algorithms::iterateWindingPos(q, poly_list);
     else
         result = algorithms::iterateRayPos(q, poly_list);
+    ui->Canvas->setResultPolygons(result);
+    ui->Canvas->repaint();
 
+    //report status in label
     QString string_result;
     for(int i=0;i<result.size();i++){
         string_result += " "+QString::number(result[i]); //TODO this may not work, do something better when testing is available

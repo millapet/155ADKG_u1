@@ -22,6 +22,11 @@ void draw::paintEvent(QPaintEvent *e)
     0;0 is in the top left corner, y increases downwards and x increases rightwards
     this is why we  need to transform the coordinates */
     painter.setWindow(0,0,600,600);
+
+    //set brush properties (color and style of filled polygons)
+    QBrush brush(Qt::red);
+
+    //draw the polygons
         for (int j=0; j<poly_list.size();j++)
            { //iterate over all the polygons
                QPolygon polygon;
@@ -31,7 +36,19 @@ void draw::paintEvent(QPaintEvent *e)
                {
                    polygon.append(tmp_polygon.at(i));
                }
-               painter.drawPolygon(polygon); //draw the outlines
+
+               //if the polygon contains a point - colour it in, else just draw the outline
+               auto in = std::find(result_polygons.begin(),result_polygons.end(),j);
+               if(in != result_polygons.end()){
+                   QPainterPath path;
+                   path.addPolygon(polygon);
+                   painter.fillPath(path,brush);
+                   //painter.drawPolygon(polygon,Qt::WindingFill);
+               }
+               painter.drawPolygon(polygon);
+
+
+
            }
         //p_flag=false; //set back to point drawing
         painter.drawEllipse(q.x() - 5 ,q.y()-5, 10, 10);

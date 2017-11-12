@@ -13,8 +13,9 @@ class draw : public QWidget
     Q_OBJECT
 private:
     QPoint q;
-    std::vector<std::vector<QPoint>> poly_list;
+    std::vector<std::vector<QPoint>> poly_list; //polygon list with all the loaded values
     std::vector<QPoint> points;
+    std::vector<int> result_polygons; //polygons to be colored
 
 public:
     explicit draw(QWidget *parent = nullptr);
@@ -24,9 +25,9 @@ public:
     std::vector<QPoint> getPoints(){return points;}
     std::vector<std::vector<QPoint>> getList(){return poly_list;}
     QPoint getQ(){return q;}
-    //void drawPolygons();
     void loadData (const char* path, std::ifstream &file, QString &status);
-    //void placePoint(){p_flag = false;}
+    void setResultPolygons(std::vector<int> res){result_polygons = res;}
+
 
 signals:
 
