@@ -3,7 +3,6 @@
 
 draw::draw(QWidget *parent) : QWidget(parent)
 {
-p_flag = false;
 }
 
 
@@ -11,7 +10,7 @@ void draw::mousePressEvent(QMouseEvent *e)
 {
     q.setX(e->pos().x());
     q.setY(e->pos().y());
-    repaint();
+    update();
 
 
 }
@@ -19,29 +18,23 @@ void draw::mousePressEvent(QMouseEvent *e)
 void draw::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
-    //painter.begin(this);
-    if(p_flag){
+    /* TODO: Qt's coordinate axes are different to the standard axes
+    0;0 is in the top left corner, y increases downwards and x increases rightwards
+    this is why we  need to transform the coordinates */
+    painter.setWindow(0,0,600,600);
         for (int j=0; j<poly_list.size();j++)
            { //iterate over all the polygons
                QPolygon polygon;
-               for (int i=0;i < points.size(); i++) //iterate over each point in polygon
+               std::vector<QPoint> tmp_polygon;
+               tmp_polygon = poly_list.at(j);
+               for (int i=0;i < tmp_polygon.size(); i++) //iterate over each point in polygon
                {
-                   polygon.append(points[i]);
+                   polygon.append(tmp_polygon.at(i));
                }
                painter.drawPolygon(polygon); //draw the outlines
            }
-        p_flag=false; //set back to point drawing
-    }
-    else{
+        //p_flag=false; //set back to point drawing
         painter.drawEllipse(q.x() - 5 ,q.y()-5, 10, 10);
-    }
-    //paintEvent(e);
-    //painter.end();
-}
-
-void draw::drawPolygons(){
-    p_flag = true;
-    repaint();
 }
 
 void draw::clear()

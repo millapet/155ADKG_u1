@@ -15,7 +15,6 @@ private:
     QPoint q;
     std::vector<std::vector<QPoint>> poly_list;
     std::vector<QPoint> points;
-    bool p_flag;
 
 public:
     explicit draw(QWidget *parent = nullptr);
@@ -25,8 +24,9 @@ public:
     std::vector<QPoint> getPoints(){return points;}
     std::vector<std::vector<QPoint>> getList(){return poly_list;}
     QPoint getQ(){return q;}
-    void drawPolygons();
+    //void drawPolygons();
     void loadData (const char* path, std::ifstream &file, QString &status);
+    //void placePoint(){p_flag = false;}
 
 signals:
 

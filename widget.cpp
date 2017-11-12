@@ -39,7 +39,7 @@ void Widget::on_pushButton_3_clicked() //when you click "analyze"
 
     QString string_result;
     for(int i=0;i<result.size();i++){
-        string_result += " "+result[i]; //TODO this may not work, do something better when testing is available
+        string_result += " "+QString::number(result[i]); //TODO this may not work, do something better when testing is available
     }
     ui->analyze_label->setText(string_result);
 
@@ -59,5 +59,6 @@ void Widget::on_pushButton_clicked() //when you click "load"
 
         ui->Canvas->loadData(path, file, status);
         ui->status_label->setText(status);
-        ui->Canvas->drawPolygons();
+        ui->Canvas->repaint();
 }
+

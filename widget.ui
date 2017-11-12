@@ -123,7 +123,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Number of polygon: </string>
+         <string>Status:</string>
         </property>
        </widget>
       </item>
