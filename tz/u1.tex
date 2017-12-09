@@ -124,11 +124,11 @@
 %----------------------------------------------------------------------------------------
 
 \newcommand{\hmwkTitle}{Geometrické vyhledávání bodu} % Assignment title
-\newcommand{\hmwkDueDate}{Datum odevzdání: 13.11.2017} % Due date
+\newcommand{\hmwkDueDate}{Datum opravy: 8.12.2017} % Due date
 \newcommand{\hmwkClass}{155ADKG} % Course/class
 %\newcommand{\hmwkClassTime}{10:30am} % Class/lecture time
 %\newcommand{\hmwkClassInstructor}{Jones} % Teacher/lecturer
-\newcommand{\hmwkAuthorName}{Petra~Millarová, Bc.~Oleksiy~Maybrodskyy} % Your name
+\newcommand{\hmwkAuthorName}{Petra~Millarová, Oleksiy~Maybrodskyy} % Your name
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -179,7 +179,7 @@
 Tato úloha se věnuje řešení praktického problému určování pozice uživatelem zadaného bodu $q$ vůči polygonům načteným ze souboru. Jako implementaci si lze zjednodušeně představit zjišťování polohy konkrétního bodu kliknutím na digitální mapě. 
 \\
 \\
-\textsl{Nechť existuje pole ve dvojrozměrné kartézské soustavě s \textbf n body. Uzavřením tohoto pole vznikne polygon. Polygon může nabývat jak konvexní, tak nekonvexní tvar.}
+\textsl{Nechť ve dvojrozměrné kartézské soustavě existuje množina bodů tvořena \textbf n body. Uzavřením tohoto této množiny vznikne polygon. Polygon může nabývat jak konvexní, tak nekonvexní tvar.}
 \\
 \\
 Polygon je konvexní právě tehdy, když poloha všech bodů je vůči jakékoliv přímce procházející vedle polygonu, vždy na stejné straně. 
@@ -250,8 +250,8 @@ Hledáný algoritmus je možné popsat následovně:
 Součtový úhel bude dále značen jako $w$. Výpočet je lepší provádět proti směru hodinových ručiček, jelikož v případě tohoto směru hodnota počítaných oběhů Winding Number $\Omega$  nabývá kladných hodnot. Je třeba také pamatovat, že hodnota $\Omega$ je uváděna v počtech oběhů a je záporná při oběhu po směru 
 hodinových ručiček a kladná ve směru opačném. Do výpočtu také vstupuje tolerance $\epsilon$, která zahrnuje chyby vzniklé zaokrouhlováním a strojovou přesností. Dle uvedených matematických podmínek mohou nastat následující případy:
 \begin{enumerate} 
-\item $w$=\textbf {2R}, pak $q \in P_i$ 
-\item  $w$ < \textbf {2R}, pak $q {\not \in} P_i$
+\item $w$= $2\pi$ , pak $q \in P_i$ 
+\item  $w$ < $2\pi$, pak $q  { \not \in }  P_i$
 \end{enumerate}
  Níže je uveden algoritmus výpočtu: 
 
@@ -265,9 +265,9 @@ hodinových ručiček a kladná ve směru opačném. Do výpočtu také vstupuje
 
 \item  $\omega = \omega + \omega_i$, pro bod vprávo od orientace na bod $p_i$, pokud je bod vlevo od orientace na bod $p_i$, pak $\omega = \omega - \omega_i$
 
-\item Pokud platí podmínka $(\left|\omega - 2\Pi \right| < \epsilon)$, pak $q \in P$
+\item Pokud platí podmínka $(\left|\omega - 2\pi \right| < \epsilon)$, pak $q \in P$
 
-\item Pokud neplatí podmínka  $(\left|\omega - 2\Pi \right| < \epsilon)$, pak $q \notin P$
+\item Pokud neplatí podmínka  $(\left|\omega - 2\pi \right| < \epsilon)$, pak $q \notin P$
 
 \end{enumerate} 
 \clearpage
@@ -350,6 +350,275 @@ Podle výsledků daného testu se červeně zvýrazní polygony, do kterých pat
         \caption{"Výstup s více polygony"}
 \end{figure}
 \clearpage
+
+
+\newpage 
+
+ 
+
+\section{Dokumentace} 
+
+ 
+
+\subsection{Popis tříd} 
+
+ 
+
+\subsubsection{Algorithms} 
+
+
+ 
+
+Třída byla vytvořena pro provedení výpočetních funkci, je tvořená \textbf{Ray} a \textbf{Winding Number} algoritmy. Současti těchto algoritmů jsou funkce pro iteraci algoritmu a výpočet úhlu mezi dvěma vektory a zjišťování pozice bodu vůči přimce.\\ 
+
+\bigskip 
+
+\textbf{getPosition} je funkce, která popisuje polohu bodu vůči linii. Do funkce vstupuji 3 hodnoty typu  \textbf{QPoint}, které reprezentuji hodnoty dvou vektorů. Návratová hodnota této funkce je celé číslo \textbf{intiger}.\\ 
+\bigskip 
+
+\textbf{Input:}
+\begin{enumerate} 
+\item $QPoint$ \&q
+\item $QPoint$ \&a
+\item $QPoint$ \&b
+\end{enumerate}
+
+\bigskip 
+\textbf{Output:}
+\begin{enumerate} 
+\item $int$
+\end{enumerate}
+
+\bigskip 
+
+\textbf{getAngle} provádí výpočet úhlu mezi dvěmi vektory. Do funkce vstupuji 4 hodnoty typu \textbf{QPoint}, které reprezentuji hodnoty dvou vektorů. Jelikož se jedná o výpočet úhlu, tak logicky návratovou hodnotou 
+je funkce typu \textbf{double}.\\ 
+\bigskip 
+
+\textbf{Input:}
+\begin{enumerate} 
+\item $QPoint$ \&p1
+\item $QPoint$ \&p2
+\item $QPoint$ \&p3
+\item $QPoint$ \&p4
+\end{enumerate}
+
+\bigskip 
+\textbf{Output:}
+\begin{enumerate} 
+\item $double$
+\end{enumerate}
+
+\bigskip 
+\textbf{getWindingPos} určuje polohu bodu vůči vektoru polygonů. Návratová hodnota je  \textbf{bool} která obsahuje informaci jestli je bod uvnitř, respektivě na hraně, nebo jestli je mimo polygon.\\ 
+
+\bigskip 
+
+
+\textbf{Input:}
+\begin{enumerate} 
+\item $QPoint$ \&q
+\item $std::vector<QPoint>$ pol
+\end{enumerate}
+
+\bigskip 
+\textbf{Output:}
+\begin{enumerate} 
+\item $bool$
+\end{enumerate}
+
+\bigskip 
+
+\textbf{getRayPos} určuje polohu bodu vůči vektoru polygonů. Návratová hodnota je \textbf{bool} která obsahuje informaci jestli je bod uvnitř, respektivě na hraně, nebo jestli je mimo polygon.\\ \\ 
+
+\bigskip 
+
+ \textbf{Input:}
+\begin{enumerate} 
+\item $QPoint$ \&q
+\item $std::vector<QPoint>$ pol
+\end{enumerate}
+
+\bigskip 
+\textbf{Output:}
+\begin{enumerate} 
+\item $bool$
+\end{enumerate}
+
+
+
+\bigskip 
+
+\textbf{iterateWindingPos} vraci konkretní indexy polygonů, ve kterých se bod $q$ nachází. Uvnitř funkci dochází k volání funkce \textbf{getWindingPos} která právě uvádí polohu bodu v polygonu.
+ \\ 
+
+\bigskip 
+
+ \textbf{Input:}
+\begin{enumerate} 
+\item $QPoint$ \&q
+\item $std::vector<std::vector<QPoint>> $ pollist
+\end{enumerate}
+
+\bigskip 
+\textbf{Output:}
+\begin{enumerate} 
+\item $std::vector<int>$
+\end{enumerate}
+
+\bigskip 
+
+\textbf{iterateRayPos} vraci konkretní indexy polygonů, ve kterých se bod $q$ nachází. Uvnitř funkci dochází k volání funkce \textbf{getRayPos} která právě uvádí polohu bodu v polygonu.
+ \\ 
+
+\bigskip 
+
+ \textbf{Input:}
+\begin{enumerate} 
+\item $QPoint$ \&q
+\item $std::vector<std::vector<QPoint>> $ pollist
+\end{enumerate}
+
+\bigskip 
+\textbf{Output:}
+\begin{enumerate} 
+\item $std::vector<int>$
+\end{enumerate}
+
+\subsubsection{Draw} 
+
+
+\bigskip 
+
+\textbf{Draw} slouží k vykreslování testovaného bodu \textit{\textbf {q}} a vykreslování polygonů včetně jejich 
+výplně s ohledem na umistění bodu  $q$.\\
+
+
+\bigskip 
+\textbf{mousePressEvent} funkce slouži pro přímé načítaní souřadnic bodu \textit{\textbf {q}} z programu. 
+QPoint. Funkce neobsahuje návratovou hodnotu.\\ 
+\bigskip 
+ \textbf{Input:}
+\begin{enumerate} 
+\item $QMouseEvent$ *e
+\end{enumerate}
+\bigskip 
+ \textbf{Output:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+\bigskip
+
+\textbf{paintEvent} primarní účel funkce je grafické znázornění načtených polygonů, pokud bod se nachází bezprostředně uvnitř polygonu, tak aj jejich barevná výplň. 
+
+\bigskip 
+ \textbf{Input:}
+\begin{enumerate} 
+\item $QPaintEvent $ *e
+\end{enumerate}
+\bigskip 
+ \textbf{Output:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+\bigskip
+
+\textbf{clear}, jak již název vypovída funkce slouži k vyčištění dosavadních dat a umožňuje tak znovrozjetí aplikace. 
+
+\bigskip 
+ \textbf{Input:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+\bigskip 
+ \textbf{Output:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+
+\bigskip 
+
+\textbf{loadData} funkce naplňuje vektor polygonu. Současti funkce jsou oznamení jednotlivých chyb v připadě špatných vstupných hodnot, nebo jejich neodstačující počet, nebo že načtení proběhlo úspěšně. \\ 
+
+
+\bigskip 
+ \textbf{Input:}
+\begin{enumerate} 
+\item $const char$* path
+\item $std::ifstream$ \&file
+\item $QString$ \&status
+\end{enumerate}
+\bigskip
+ 
+ \textbf{Output:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+
+\bigskip 
+
+\bigskip 
+
+
+\subsubsection{Widget} 
+
+\bigskip 
+
+Je to třída vytvořena pro praci s grafickým rozhraním celého programu. Přes ní se provádí načtení souborů a grafické znázornění výsledku aplikace. \\ 
+
+\bigskip 
+
+\textbf{on pushButton clear clicked} 
+\\
+Provední obnovy prográmu. 
+
+\bigskip 
+ \textbf{Input:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+\bigskip
+ \textbf{Output:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+
+
+\bigskip 
+
+
+\textbf{on pushButton analyze clicked} provadi analýzu jednotlivých požádavku uživatele, jestli je požadovan algoritmus Ray nebo Winding Number provádí předspracování dat. Zobrazi pomoci $label$ výsledky na obrazovce.\\ 
+
+\bigskip 
+ \textbf{Input:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+\bigskip
+ \textbf{Output:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+
+\bigskip 
+
+\textbf{on pushButton load clicked} Primarní účel funkce je načtení souboru dat z textového souboru .txt. Otevíra grafické rozhraní vyhledavání cesty k souboru.\\ 
+
+\bigskip 
+ \textbf{Input:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+\bigskip
+ \textbf{Output:}
+\begin{enumerate} 
+\item none
+\end{enumerate} 
+
+\newpage 
+
+ 
+
 \section{Závěr}
 \indent Autoři splnili většinu bodů zadání a vznikl program, který načítá soubor polygonů, následně uživatele nechá umístit bod a po stisknutí tlačítka urči, zda a ve kterých polygonech bod leží. 
 	\subsection{Náměty na vylepšení} %+možné či neřešené problémy
