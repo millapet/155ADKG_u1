@@ -201,11 +201,11 @@ Pokud následně polygon rozdělíme na menší polygonové útvary, pak polohu 
 \item   Bod se nachází na hraně jednoho  $q {\not \in} P_i$ nebo dvou polygonů $q {\in} P_{i,i+1}$ 
 \item   Bod je totožný s vrcholem jednoho polygonu nebo více polygonů $q {\in} P_{i,i+1,...,i+n}$
 \end{enumerate}
-Výpočet se bude provádět na základě metod \textbf {Ray Crossing algorithm} a  \textbf {Winding Number algorithm}. Jejich výpočet je popsán v následujících kapitolách. 
+Výpočet se bude provádět na základě metod \textbf {Ray Crossing} a  \textbf {Winding Number} algoritmu a je popsán v následující kapitole.
 \\
 \clearpage
 \section{Popisy algoritmů} %formálním jazykem
-V dané úloze jsou použity následující algoritmy, avšak existují i další možnosti, jak polohu bodu určit (metoda pásů, Line Sweep algorithm aj.)
+V programu jsou použity následující algoritmy, avšak existují i další možnosti, jak polohu bodu určit (metoda pásů, Line Sweep algorithm aj.)
 \subsection{Ray crossing algorithm}
 \textsl{Nechť existuje uzavřený polygon ve dvojrozměrné kartézské soustavě, tvořený \textbf n body. Nechť následně existuje bod q, kteréhož polohu se snažime určit. Proložíme-li bodem q nekonečný počet paprsků směrem k polygonu, pak pro jednotlivý paprsek nastane jedna z následujících situací: }
 \begin{enumerate}
@@ -273,17 +273,13 @@ hodinových ručiček a kladná ve směru opačném. Do výpočtu také vstupuje
 \clearpage
 \newpage
 \section{Problematické situace a singularity} %rozbor a osetreni v kodu
-\subsection{Bod ležící na hraně polygonu} 
+\label{singularity}
+\subsection{Bod ležící na hraně polygonu nebo v jeho vrcholu} 
 
 \bigskip 
 
-Pokud vyjdeme z podmínky, že bod se nachází na hraně polygonu, pak z pohledu geometrie je jasné, že svýrající úhel mezi krajnými body dané hrany bude roven $R$ neboli. Pokud ale ještě zavedeme chybu toleranci $\epsilon$, pak $R+\epsilon$. Jelikož bod leží na hraně, pak zároveň patří do obou polygonů.
+Do funkce pro určování zda se bod nachází vpravo nebo vlevo od přímky, byla přidána další návratová hodnota, která je vracena v případě, že bod neleží ani vpravo ani vlevo a zároveň se součet vzdáleností od bodů určujících přímku rovná vzdálenosti mezi těmito krajními body. V takovém případě leží bod na hraně polygonu. Tento postup také ošetřuje případ, kdy je testovaný bod identický s jedním z krajních bodů. Indexy polygonů, na kterých bod leží se ukládají do vektoru, podle kterého jsou pak polygony vybarvovány. 
 
-\subsection{Bod je identický s vrcholem jednoho až n polygonů} 
-
-\bigskip 
-
-Byl proveden prohledávácí test, jestli souřadnice bodu  $q$ jsou identické se souřadnicemi kterého koliv polygonu. Pokud test byl úspěšný, pak se již dále neprováděl a rovnou se vybarvil konkretní polygon. Pokud během testu se ukazalo, že souřadnice jsou identické s vrcholem, který je společný pro několik polygonů, pak se vybarvilo hned několik polygonů.
 \begin{figure}[htbp]
 \centering
         \includegraphics[clip, trim=0cm 0cm 0cm 0cm, width=1\textwidth]{more.jpg}
@@ -302,31 +298,26 @@ Vstupní (.txt) soubor obsahuje polygony zadané jednotlivými body.
 
 \bigskip 
 
- \textit{\textbf {Složený vstupných dat .txt:}}
-První řádek obsahuje počet vstpujících polygonů souřanici \textit{\textbf {X}}
-\\
-Druhý řádek obsahuje počet bodů prvního polygonu
-\\
-Třetý řádek obsahuje vypsané souřadnice  \textit{\textbf {X}} vstupního polygonu
-\\
-Čtvrtý řádek obsahuje vypsané souřadnice  \textit{\textbf {Y}} vstupního polygonu
+ \textit{\textbf {Struktura vstupních dat:}}
+\textit{\textbf {počet polygonů v souboru}}\\
+\textit{\textbf {počet bodů v následujícím polygonu}}\\
+\textit{souřadnice X daného polygonu}\\
+\textit{souřadnice Y daného polygonu}\\
+\textit{\textbf {počet bodů v následujícím polygonu}} \\
+\textit{souřadnice X daného polygonu}\\
+\textit{souřadnice Y daného polygonu}\\
+\textit{\textbf {počet bodů v následujícím polygonu}}\\
+atd...
 \bigskip 
 \\
-Další řádek obsahuje počet bodů druhého polygonu, nasledující vstup je identický se vstupem prvního polygonu
-\bigskip 
-
-Při vstupu textového souboru program již rovnou rozezná počet vstupných polygonů a jejích rozměry, což značně ulehčuje následující prací. Vstupní souřadnice mohou být, jak celočíselné, tak s desetinou tečkou. Souřadnice \textit{\textbf {X}} a \textit{\textbf {Y}} se sekvenčně ukládají do 
-proměnné \textbf {QPoint}, která se ukládá do proměnné vektoru typu  \textbf {std::vector<QPoint>}, který znázorňuje polygon, který  se následně ukláda do proměnné typu  \textbf {std::vector<vector<QPoint>}\textbf {>}, která sloučuje všechny polygony. 
+Při vstupu textového souboru program tedy dostane zadaný počet bodů v polygonu a jejích rozměry, což značně ulehčuje následující prací. Souřadnice \textit{\textbf {X}} a \textit{\textbf {Y}} se sekvenčně ukládají do 
+proměnné \textbf {QPoint}, a následně do vektoru  \textbf {std::vector<QPoint>}, který  se následně ukláda do proměnné typu  \textbf {std::vector<vector<QPoint>}\textbf {>}, která slučuje všechny polygony.
 
 
 \section{Výstupní data}
-	Výstup je vizualizací řešeného problému v grafickém okně. Taky v grafickém okně je slovně popsano, do kolika polygonu náleží hledaný bod.\\ 
+	Výstupem je vizalizace řešení v grafickém okně a zároveň vypsání v kolika polygonech nakliknutý bod leží. Polygony, ve kterých bod leží, se zvýrazní červeně.\\ 
 \bigskip 
 
-Po načtení vstupních dat \textit{\textbf {Load}}, v pravém horním rohu grafického 
-okna, se polygony ihned vykreslí a po libovolným kliknutí levého tlačítka myši se vykreslí také vstupní 
-bod.\\ 
-Podle výsledků daného testu se červeně zvýrazní polygony, do kterých patří hledaný bod.
 \clearpage
 \section{Ukázky aplikace} %printscreen
 \begin{figure}[htbp]
@@ -368,12 +359,11 @@ Podle výsledků daného testu se červeně zvýrazní polygony, do kterých pat
 
 
  
-
-Třída byla vytvořena pro provedení výpočetních funkci, je tvořená \textbf{Ray} a \textbf{Winding Number} algoritmy. Současti těchto algoritmů jsou funkce pro iteraci algoritmu a výpočet úhlu mezi dvěma vektory a zjišťování pozice bodu vůči přimce.\\ 
+Tato třída obsahuje algoritmy pro zjištění polohy uživatelsky zvoleného bodu. Součástí jsou i pomocné funkce pro výpočet úhlu mezi dvěma vektory, zjišťování polohy bodu vůči přimce a také funkce, které zajišťují otestování všech polygonů ve vektoru.\\ 
 
 \bigskip 
 
-\textbf{getPosition} je funkce, která popisuje polohu bodu vůči linii. Do funkce vstupuji 3 hodnoty typu  \textbf{QPoint}, které reprezentuji hodnoty dvou vektorů. Návratová hodnota této funkce je celé číslo \textbf{intiger}.\\ 
+\textbf{getPosition} je funkce, která popisuje polohu bodu vůči linii. Do funkce vstupuji 3 hodnoty typu  \textbf{QPoint}, které reprezentuji dva body na přímce a bod, jehož poloha se určuje. Návratová hodnota této funkce je celé číslo \textbf{intiger}, podle výsledku testování.\\ 
 \bigskip 
 
 \textbf{Input:}
@@ -385,14 +375,16 @@ Třída byla vytvořena pro provedení výpočetních funkci, je tvořená \text
 
 \bigskip 
 \textbf{Output:}
-\begin{enumerate} 
-\item $int$
-\end{enumerate}
+\begin{itemize} 
+\item 0 - bod leží vpravo od přímky
+\item 1 - bod leží vlevo od přímky
+\item 2 - bod leží na úsečce dané dvěma zadanými body
+
+\end{itemize}
 
 \bigskip 
 
-\textbf{getAngle} provádí výpočet úhlu mezi dvěmi vektory. Do funkce vstupuji 4 hodnoty typu \textbf{QPoint}, které reprezentuji hodnoty dvou vektorů. Jelikož se jedná o výpočet úhlu, tak logicky návratovou hodnotou 
-je funkce typu \textbf{double}.\\ 
+\textbf{getAngle} provádí výpočet úhlu mezi dvěmi vektory. Do funkce vstupuji 4 hodnoty typu \textbf{QPoint}, které reprezentuji hodnoty dvou vektorů. Návratová hodnota typu \textbf{double} představuje hodnotu velikosti úhlu v radiánech.\\ 
 \bigskip 
 
 \textbf{Input:}
@@ -405,12 +397,12 @@ je funkce typu \textbf{double}.\\
 
 \bigskip 
 \textbf{Output:}
-\begin{enumerate} 
+\begin{itemize} 
 \item $double$
-\end{enumerate}
+\end{itemize}
 
 \bigskip 
-\textbf{getWindingPos} určuje polohu bodu vůči vektoru polygonů. Návratová hodnota je  \textbf{bool} která obsahuje informaci jestli je bod uvnitř, respektivě na hraně, nebo jestli je mimo polygon.\\ 
+\textbf{getWindingPos} určuje polohu bodu vůči vektoru polygonů. Návratovou hodnotou je  \textbf{bool} - \textit{true} pokud bod leží uvnitř polygonu (nebo na jeho hraně/rohu) a \textit{false} pokud leží mimo tento polygon.
 
 \bigskip 
 
@@ -423,13 +415,13 @@ je funkce typu \textbf{double}.\\
 
 \bigskip 
 \textbf{Output:}
-\begin{enumerate} 
+\begin{itemize} 
 \item $bool$
-\end{enumerate}
+\end{itemize}
 
 \bigskip 
 
-\textbf{getRayPos} určuje polohu bodu vůči vektoru polygonů. Návratová hodnota je \textbf{bool} která obsahuje informaci jestli je bod uvnitř, respektivě na hraně, nebo jestli je mimo polygon.\\ \\ 
+\textbf{getRayPos} určuje polohu bodu vůči vektoru polygonů. Návratovou hodnotou je  \textbf{bool} - \textit{true} pokud bod leží uvnitř polygonu (nebo na jeho hraně/rohu) a \textit{false} pokud leží mimo tento polygon.
 
 \bigskip 
 
@@ -441,15 +433,15 @@ je funkce typu \textbf{double}.\\
 
 \bigskip 
 \textbf{Output:}
-\begin{enumerate} 
+\begin{itemize} 
 \item $bool$
-\end{enumerate}
+\end{itemize}
 
 
 
 \bigskip 
 
-\textbf{iterateWindingPos} vraci konkretní indexy polygonů, ve kterých se bod $q$ nachází. Uvnitř funkci dochází k volání funkce \textbf{getWindingPos} která právě uvádí polohu bodu v polygonu.
+\textbf{iterateWindingPos} vraci vektor indexů polygonů, ve kterých se bod $q$ nachází. Uvnitř funkce dochází k procházení všech polygonů a volání funkce \textbf{getWindingPos}.
  \\ 
 
 \bigskip 
@@ -462,13 +454,13 @@ je funkce typu \textbf{double}.\\
 
 \bigskip 
 \textbf{Output:}
-\begin{enumerate} 
+\begin{itemize} 
 \item $std::vector<int>$
-\end{enumerate}
+\end{itemize}
 
 \bigskip 
 
-\textbf{iterateRayPos} vraci konkretní indexy polygonů, ve kterých se bod $q$ nachází. Uvnitř funkci dochází k volání funkce \textbf{getRayPos} která právě uvádí polohu bodu v polygonu.
+\textbf{iterateRayPos} vraci konkretní indexy polygonů, ve kterých se bod $q$ nachází. Uvnitř funkce dochází k procházení všech polygonů a volání funkce \textbf{getRayPos}.
  \\ 
 
 \bigskip 
@@ -480,23 +472,22 @@ je funkce typu \textbf{double}.\\
 \end{enumerate}
 
 \bigskip 
-\textbf{Output:}
-\begin{enumerate} 
+\textbf{Output: }
+\begin{itemize} 
 \item $std::vector<int>$
-\end{enumerate}
+\end{itemize}
 
 \subsubsection{Draw} 
 
 
 \bigskip 
 
-\textbf{Draw} slouží k vykreslování testovaného bodu \textit{\textbf {q}} a vykreslování polygonů včetně jejich 
+Třída \textbf{Draw} slouží k vykreslování testovaného bodu \textit{\textbf {q}} a vykreslování polygonů včetně jejich 
 výplně s ohledem na umistění bodu  $q$.\\
 
 
 \bigskip 
-\textbf{mousePressEvent} funkce slouži pro přímé načítaní souřadnic bodu \textit{\textbf {q}} z programu. 
-QPoint. Funkce neobsahuje návratovou hodnotu.\\ 
+\textbf{mousePressEvent} funkce slouži pro načítaní souřadnic bodu \textit{\textbf {q}} do třídní proměnné z programu. Funkce nemá návratovou hodnotu.
 \bigskip 
  \textbf{Input:}
 \begin{enumerate} 
@@ -504,12 +495,12 @@ QPoint. Funkce neobsahuje návratovou hodnotu.\\
 \end{enumerate}
 \bigskip 
  \textbf{Output:}
-\begin{enumerate} 
-\item none
-\end{enumerate}
+\begin{itemize} 
+\item void
+\end{itemize}
 \bigskip
 
-\textbf{paintEvent} primarní účel funkce je grafické znázornění načtených polygonů, pokud bod se nachází bezprostředně uvnitř polygonu, tak aj jejich barevná výplň. 
+\textbf{paintEvent} - tato funkce slouží k vykreslení dat a pokud je naplněn vektor s indexy polygonů, ve kterých leží bod zadaný uživatelem.
 
 \bigskip 
  \textbf{Input:}
@@ -518,12 +509,12 @@ QPoint. Funkce neobsahuje návratovou hodnotu.\\
 \end{enumerate}
 \bigskip 
  \textbf{Output:}
-\begin{enumerate} 
+\begin{itemize} 
 \item none
-\end{enumerate}
+\end{itemize}
 \bigskip
 
-\textbf{clear}, jak již název vypovída funkce slouži k vyčištění dosavadních dat a umožňuje tak znovrozjetí aplikace. 
+\textbf{clear}, funkce slouži k vyčištění dosavadních dat.
 
 \bigskip 
  \textbf{Input:}
@@ -532,9 +523,9 @@ QPoint. Funkce neobsahuje návratovou hodnotu.\\
 \end{enumerate}
 \bigskip 
  \textbf{Output:}
-\begin{enumerate} 
+\begin{itemize} 
 \item none
-\end{enumerate}
+\end{itemize}
 
 \bigskip 
 
@@ -551,9 +542,9 @@ QPoint. Funkce neobsahuje návratovou hodnotu.\\
 \bigskip
  
  \textbf{Output:}
-\begin{enumerate} 
+\begin{itemize} 
 \item none
-\end{enumerate}
+\end{itemize}
 
 \bigskip 
 
@@ -564,13 +555,30 @@ QPoint. Funkce neobsahuje návratovou hodnotu.\\
 
 \bigskip 
 
-Je to třída vytvořena pro praci s grafickým rozhraním celého programu. Přes ní se provádí načtení souborů a grafické znázornění výsledku aplikace. \\ 
+Tato třída je vytvořena pro praci s grafickým rozhraním celého programu. Přes ní se provádí načtení souborů a grafické znázornění výsledků aplikace. \\ 
 
 \bigskip 
 
 \textbf{on pushButton clear clicked} 
 \\
-Provední obnovy prográmu. 
+Provední obnovy programu. 
+
+\bigskip 
+ \textbf{Input:}
+\begin{enumerate} 
+\item none
+\end{enumerate}
+\bigskip
+ \textbf{Output:}
+\begin{itemize} 
+\item none
+\end{itemize}
+
+
+\bigskip 
+
+
+\textbf{on pushButton analyze clicked} provadi analýzu jednotlivých požádavku uživatele, jestli je požadovan algoritmus Ray nebo Winding Number provádí předzpracování dat. Zobrazi pomoci $label$ výsledky na obrazovce.\\ 
 
 \bigskip 
  \textbf{Input:}
@@ -583,26 +591,9 @@ Provední obnovy prográmu.
 \item none
 \end{enumerate}
 
-
 \bigskip 
 
-
-\textbf{on pushButton analyze clicked} provadi analýzu jednotlivých požádavku uživatele, jestli je požadovan algoritmus Ray nebo Winding Number provádí předspracování dat. Zobrazi pomoci $label$ výsledky na obrazovce.\\ 
-
-\bigskip 
- \textbf{Input:}
-\begin{enumerate} 
-\item none
-\end{enumerate}
-\bigskip
- \textbf{Output:}
-\begin{enumerate} 
-\item none
-\end{enumerate}
-
-\bigskip 
-
-\textbf{on pushButton load clicked} Primarní účel funkce je načtení souboru dat z textového souboru .txt. Otevíra grafické rozhraní vyhledavání cesty k souboru.\\ 
+\textbf{on pushButton load clicked} Primarní účel funkce je načtení dat z textového souboru .txt. Otevírá grafické rozhraní vyhledavání cesty k souboru.\\ 
 
 \bigskip 
  \textbf{Input:}
@@ -621,9 +612,10 @@ Provední obnovy prográmu.
 
 \section{Závěr}
 \indent Autoři splnili většinu bodů zadání a vznikl program, který načítá soubor polygonů, následně uživatele nechá umístit bod a po stisknutí tlačítka urči, zda a ve kterých polygonech bod leží. 
+V této verzi technické zprávy byl upraven způsob zjištění, zda bod leží na hraně polygonu, změny jsou popsány v kapitole \ref{singularity}.
 	\subsection{Náměty na vylepšení} %+možné či neřešené problémy
 	\indent Aplikace, ač funkční a splňující daný účel, má spoustu nedostatků, které by bylo dobré v budoucnu odstranit. Autoři zde uvádí pár těch nejzjevnějších. \\
-	\indent \textit{Vykreslování dat:} Aplikace bez problému vykreslí body, které se vejdou do jejího okna 665x605px. Problém nastává až tehdy, když jsou souřadnice větší než tato hodnota. Tato chyba jde odstranit vhodnou transformací okna (nebo souřadnic), která by ale probíhala na základě načtených dat. \\
+	\indent \textit{Vykreslování dat:} Aplikace bez problému vykreslí body, které se vejdou do jejího okna 665x605px. Problém nastává až tehdy, když jsou souřadnice větší než tato hodnota. Tato chyba jde odstranit vhodnou transformací okna (nebo souřadnic), která by probíhala na základě načtených dat. \\
 	\indent \textit{Souřadnicové osy: } Vykreslovací okno má v Qt, stejně jako ve většině podobných nástrojů, počátek souřadnic v levém horním rohu, kladnou osu x vpravo a kladnou osu y směrem dolů. Tento model se však neshoduje ani s geodetickými souřadnicemi používanými na našem území (kladná y doleva, kladná x dolů), ani s klasickým označením os (kladná x doprava, kladná y nahoru). Proto se body v současné verzi zobrazují jinak, než by možná uživatel očekával. Vhodným řešením by byla opět transformace. \\
 	\indent \textit{Přesnější souřadnice:} V současném stavu aplikace sice načítá data ve formátu \texttt{double}, avšak datová struktura \texttt{std::vector<std::vector<QPoint>>} body načítá bez desetinných míst jako typ \texttt{int}. V Qt knihovnách existuje i datový typ \texttt{QPointF}, který ukládá body jako typ \texttt{float}. Změně však bude potřeba přizpůsobit porovnávání čísel v algoritmech.
 \bibliography{u1}
