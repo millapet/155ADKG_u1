@@ -7,21 +7,31 @@ algorithms::algorithms()
 
 int algorithms::getPosition(QPoint &q,QPoint &a, QPoint &b)
 {
-    double eps = 1.0e-6;
+    //double eps = 1.0e-6;
+    double eps = 5;
     double ux = b.x() - a.x();
     double uy = b.y() - a.y();
     double vx = q.x() - a.x();
     double vy = q.y() - a.y();
 
     double det = (ux * vy - uy * vx);
-    if(det>eps)
+    if(det<eps && det>-eps)
+        {
+                double wx = q.x() - b.x();
+                double wy = q.y() - b.y();
+                double dist_bq =sqrt(wx*wx+wy*wy);
+                double dist_ab =sqrt(ux*ux+uy*uy);
+                double dist_aq = std::sqrt(vx*vx+vy*vy);
+                double sum_dist = dist_aq + dist_bq;
+                //if sum of distance between AQ and BQ is equal to AB - bingo
+                if((sum_dist-dist_ab)<=eps && (sum_dist-dist_ab)>=-eps)
+                return 2;
+            }
+    else if(det>eps)
         return 1;
 
-    if(det<-eps)
+    else if(det<-eps)
         return 0;
-
-    if(det<eps && det>-eps)
-        return 2; //singular case - the point lies on the line
 
     return -1;
 }
